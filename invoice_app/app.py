@@ -98,4 +98,4 @@ with st.expander("Save or load your business details"):
 st.divider()
 st.link_button("☕ Support this tool", "https://ko-fi.com/handlevaultofficial")
 st.divider()
-st.link_button("☕ Support this tool", "https://ko-fi.com/yourname", type="primary")
+st.link_button("☕ Support this tool", "https://ko-fi.com/handlevaultofficial", type="primary")
