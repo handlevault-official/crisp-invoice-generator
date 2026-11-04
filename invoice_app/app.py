@@ -95,3 +95,5 @@ with st.expander("Save or load your business details"):
     profile = {k: st.session_state.get(k, "") for k in KEYS}
     st.download_button("Download business profile", json.dumps(profile), "business-profile.json", "application/json")
     st.file_uploader("Load business profile", type="json", key="profile_file", on_change=load_profile)
+st.divider()
+st.link_button("☕ Support this tool", "https://ko-fi.com/handlevaultofficial")
