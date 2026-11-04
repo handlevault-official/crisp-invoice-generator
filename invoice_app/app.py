@@ -97,3 +97,5 @@ with st.expander("Save or load your business details"):
     st.file_uploader("Load business profile", type="json", key="profile_file", on_change=load_profile)
 st.divider()
 st.link_button("☕ Support this tool", "https://ko-fi.com/handlevaultofficial")
+st.divider()
+st.link_button("☕ Support this tool", "https://ko-fi.com/yourname", type="primary")
