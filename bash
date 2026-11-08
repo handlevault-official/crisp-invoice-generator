@@ -1,1 +1,1 @@
-git status
+cd path/to/invoice-repo
