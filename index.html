@@ -3,175 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crisp Invoice Generator</title>
+    <title>Crisp Invoice Generator | HandleVault</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border: #e2e8f0;
+            --accent-bg: #f8fafc;
+            --success: #16a34a;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            padding: 20px;
+        /* Style Themes */
+        body.theme-corporate {
+            --primary: #0f172a;
+            --primary-hover: #334155;
+            --accent-bg: #f1f5f9;
+        }
+        body.theme-slate {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --accent-bg: #f0f9ff;
+        }
+        body.theme-emerald {
+            --primary: #065f46;
+            --primary-hover: #047857;
+            --accent-bg: #ecfdf5;
+            --success: #059669;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border: 1px solid #334155;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 20px; min-height: 100vh; transition: background 0.3s; }
+        
+        header { max-width: 900px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
+        h1 { color: var(--text-main); font-size: 22px; letter-spacing: -0.5px; }
+        .sub-header { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .kofi-link { background: #ff5e5b; color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
+        .kofi-link:hover { background: #e04845; }
+        
+        .btn { background: var(--primary); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-danger { background: #ef4444; padding: 6px 10px; font-size: 12px; }
+        .btn-danger:hover { background: #dc2626; }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #3b82f6;
-            padding-bottom: 20px;
-            margin-bottom: 25px;
-        }
+        .container { max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        h1 {
-            color: #38bdf8;
-            font-size: 24px;
-            letter-spacing: 1px;
-        }
+        /* Theme Selector Bar */
+        .style-bar { max-width: 900px; margin: 0 auto 15px; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
+        .style-btn { background: var(--border); border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; color: var(--text-main); }
+        .style-btn.active { background: var(--primary); color: #fff; }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+        .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+        
+        label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        input { background: var(--accent-bg); border: 1px solid var(--border); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 13px; width: 100%; font-family: inherit; }
+        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
+        table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-main); font-size: 12px; font-weight: 700; text-transform: uppercase; background: var(--accent-bg); border-top: 1px solid var(--border); border-bottom: 2px solid var(--border); }
 
-        label {
-            font-size: 12px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: bold;
-        }
+        .totals { text-align: right; margin-top: 24px; font-size: 18px; font-weight: 600; color: var(--text-main); }
+        .totals span { color: var(--success); font-weight: 800; }
 
-        input, textarea {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: #fff;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #38bdf8;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #334155;
-        }
-
-        th {
-            color: #38bdf8;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-
-        .btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn:hover {
-            background: #2563eb;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            padding: 6px 10px;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .totals {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 18px;
-        }
-
-        .totals span {
-            color: #22c55e;
-            font-weight: bold;
-        }
+        footer { max-width: 900px; margin: 30px auto 0; text-align: center; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 15px; }
+        footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
 
         @media print {
-            body { background: #fff; color: #000; padding: 0; }
-            .container { border: none; box-shadow: none; background: #fff; color: #000; max-width: 100%; }
-            input, textarea { border: none; background: transparent; color: #000; padding: 0; }
-            .btn, .no-print { display: none; }
-            th { color: #000; border-bottom: 2px solid #000; }
-            td { border-bottom: 1px solid #ccc; color: #000; }
-            .totals span { color: #000; }
+            body { background: #fff; padding: 0; }
+            header, footer, .no-print, .style-bar { display: none !important; }
+            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+            input { border: none; background: transparent; padding: 0; font-weight: 600; }
         }
     </style>
 </head>
-<body>
+<body class="theme-corporate">
+
+    <header class="no-print">
+        <div>
+            <h1>CRISP INVOICE GENERATOR</h1>
+            <div class="sub-header">Professional Multi-Style Financial Dashboard</div>
+        </div>
+        <div class="header-actions">
+            <a href="https://ko-fi.com/Handlevaultofficial" target="_blank" class="kofi-link">☕ Support on Ko-fi</a>
+            <button class="btn" onclick="window.print()">Print / Save PDF</button>
+        </div>
+    </header>
+
+    <div class="style-bar no-print">
+        <span>Layout Theme:</span>
+        <button class="style-btn active" onclick="setTheme('corporate', this)">Corporate</button>
+        <button class="style-btn" onclick="setTheme('slate', this)">Modern Slate</button>
+        <button class="style-btn" onclick="setTheme('emerald', this)">Emerald Green</button>
+    </div>
 
     <div class="container">
-        <header>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid var(--text-main); padding-bottom: 20px;">
             <div>
-                <h1>CRISP INVOICE GENERATOR</h1>
-                <p style="font-size: 12px; color: #94a3b8;">Fast, Modern & Clean Business Billing</p>
+                <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;">INVOICE</h2>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">HandleVault Studios</div>
             </div>
-            <button class="btn no-print" onclick="window.print()">Print / Save PDF</button>
-        </header>
+            <div style="text-align: right;">
+                <div class="input-group" style="width: 160px; display: inline-block;">
+                    <label>Invoice Number</label>
+                    <input type="text" value="INV-001" style="font-weight: bold; text-align: right;">
+                </div>
+            </div>
+        </div>
 
         <div class="grid-2">
             <div>
                 <div class="input-group">
-                    <label>Your Company / Name</label>
+                    <label>From (Your Company)</label>
                     <input type="text" value="HandleVault Studios">
                 </div>
                 <div class="input-group">
                     <label>Billed To (Client Name)</label>
-                    <input type="text" placeholder="Client Name / Business">
+                    <input type="text" placeholder="Client Name / Business Name">
                 </div>
             </div>
             <div>
                 <div class="input-group">
-                    <label>Invoice Number</label>
-                    <input type="text" value="INV-001">
+                    <label>Issue Date</label>
+                    <input type="date" id="invDate">
                 </div>
                 <div class="input-group">
-                    <label>Date</label>
-                    <input type="date" id="invDate">
+                    <label>Payment Terms / Due Date</label>
+                    <input type="text" value="Net 30 Days">
                 </div>
             </div>
         </div>
@@ -180,9 +144,9 @@
             <thead>
                 <tr>
                     <th>Item Description</th>
-                    <th style="width: 100px;">Qty</th>
-                    <th style="width: 140px;">Price ($)</th>
-                    <th style="width: 140px;">Total ($)</th>
+                    <th style="width: 90px;">Qty</th>
+                    <th style="width: 130px;">Price ($)</th>
+                    <th style="width: 130px;">Total ($)</th>
                     <th class="no-print" style="width: 50px;"></th>
                 </tr>
             </thead>
@@ -191,18 +155,22 @@
                     <td><input type="text" value="Pixel Art Asset Pack Design"></td>
                     <td><input type="number" class="qty" value="1" min="1" oninput="calculate()"></td>
                     <td><input type="number" class="price" value="150" min="0" oninput="calculate()"></td>
-                    <td class="item-total">$150.00</td>
+                    <td class="item-total" style="font-weight: 600;">$150.00</td>
                     <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">X</button></td>
                 </tr>
             </tbody>
         </table>
 
-        <button class="btn no-print" onclick="addRow()">+ Add Item</button>
+        <button class="btn no-print" onclick="addRow()" style="background: var(--text-main); margin-top: 4px;">+ Add Item</button>
 
         <div class="totals">
             Total Amount Due: <span id="grandTotal">$150.00</span>
         </div>
     </div>
+
+    <footer class="no-print">
+        Crisp Suite by <a href="https://ko-fi.com/Handlevaultofficial" target="_blank">HandleVault</a> — Clean, Fast & Single-File Utilities.
+    </footer>
 
     <script>
         document.getElementById('invDate').valueAsDate = new Date();
@@ -224,10 +192,10 @@
             const tbody = document.getElementById('itemsBody');
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" placeholder="Description"></td>
+                <td><input type="text" placeholder="Item description..."></td>
                 <td><input type="number" class="qty" value="1" min="1" oninput="calculate()"></td>
                 <td><input type="number" class="price" value="0" min="0" oninput="calculate()"></td>
-                <td class="item-total">$0.00</td>
+                <td class="item-total" style="font-weight: 600;">$0.00</td>
                 <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">X</button></td>
             `;
             tbody.appendChild(tr);
@@ -238,7 +206,12 @@
             btn.closest('tr').remove();
             calculate();
         }
+
+        function setTheme(themeName, btn) {
+            document.body.className = 'theme-' + themeName;
+            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
     </script>
 </body>
 </html>
-
