@@ -1,11 +1,14 @@
-# 1. Alisin ang mga lumang files kung meron man
+# Pumasok sa folder ng invoice
+cd ../crisp-invoice-generator
+
+# Alisin ang mga lumang files kung meron man
 git rm app.py requirements.txt
 
-# 2. Siguraduhing nandiyan ang index.html at i-add lahat
+# I-add ang index.html na nasa loob nito
 git add index.html
 
-# 3. I-commit ang mga pagbabago para sa Clean Corporate Invoice / ATS Resume
-git commit -m "Update to clean minimalist style with Ko-Fi support"
+# I-commit ang pagbabago
+git commit -m "Update Crisp Invoice Generator to clean corporate style with Ko-Fi support"
 
-# 4. I-push sa GitHub
+# I-push sa GitHub
 git push origin main
