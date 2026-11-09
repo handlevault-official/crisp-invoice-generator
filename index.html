@@ -352,6 +352,15 @@
           <span>Total Due</span>
           <span id="totalDisplay">₱0.00</span>
         </div>
+           <div class="tax-type-selector" style="margin-bottom: 10px;">
+    <label style="font-size: 0.75rem; display: inline-block; margin-right: 10px;">Tax Label Mode:</label>
+    <select id="taxTypeSelect" onchange="updateTaxLabel()" style="padding: 5px; background: #000; color: #ff3399; border: 2px solid #ff007f; font-family: inherit;">
+        <option value="VAT">VAT (Value-Added Tax)</option>
+        <option value="Tax">Sales Tax</option>
+        <option value="CUSTOM">Custom Label</option>
+    </select>
+    <input type="text" id="customTaxLabelInput" placeholder="Enter custom label" style="display: none; margin-top: 5px; padding: 5px;" oninput="updateTaxLabel()">
+           </div>
       </div>
     </div>
 
