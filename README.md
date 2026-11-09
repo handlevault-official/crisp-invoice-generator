@@ -2,6 +2,8 @@
 
 A lightweight, browser-based invoice and billing generator designed for freelancers, contractors, and small business owners. Create professional invoices instantly with built-in multi-currency selection, tax calculations, and one-click PDF printing. Built using vanilla HTML5, CSS, and JavaScript.
 
+> **[BETA / EARLY ACCESS TOOL]** — A lightweight, free browser-based invoice and billing generator built for creators, freelancers, and indie makers. No account required. All processing happens securely right inside your browser session.
+
 ## 🚀 Features
 
 * **Multi-Currency Support:** Easily switch between major global currencies (USD, EUR, GBP, AUD, CAD, SGD, PHP) for international clients.
@@ -18,18 +20,6 @@ If you want to run or test this project locally on your machine, follow these st
    ```bash
    git clone [https://github.com/handlevault-official/crisp-invoice-generator.git](https://github.com/handlevault-official/crisp-invoice-generator.git)
 
-> **[BETA / EARLY ACCESS TOOL]** — A lightweight, free browser-based invoice and billing generator built for creators, freelancers, and indie makers. No account required. All processing happens securely right inside your browser session.
-
----
-
-## 🚀 Key Features
-
-* **Multi-Currency Support:** Easily switch between major global currencies (USD, EUR, GBP, AUD, CAD, SGD, PHP) for international clients.
-* **Editable Line Items:** Add, remove, and update invoice items dynamically with automatic real-time total calculations.
-* **Tax & Discount Options:** Configure tax rates and totals seamlessly.
-* **Browser Print & PDF Export:** Formatted cleanly for direct printing or saving as a professional PDF.
-* **Client-Side Privacy:** Your financial data and inputs stay locally on your device. We do not store or track your invoice data on external servers.
-
 ---
 
 2. Navigate to the project directory:
@@ -45,7 +35,7 @@ If you want to run or test this project locally on your machine, follow these st
 This project is deployed and hosted live using GitHub Pages. Please make sure to test the live link in an Incognito / private window and on mobile devices before sharing widely.
 📋 Terms of Use & Privacy
 As-Is Basis: This tool is provided as a free beta utility "as-is" without warranty of any kind. While we strive for reliability, users are advised to keep local backups of important invoices and financial documents.
-Data Privacy: Because this application runs entirely client-side within your browser, no personal data, client details, or generated invoices are sent to or stored on our servers.
+Data Privacy: Because this aplication runs entirely client-side within your browser, no personal data, client details, or generated invoices are sent to or stored on our servers.
 ☕ Support, Feedback & Bug Reports
 Created by HandleVault Official.
 If you encounter any bugs, have feature suggestions, or need assistance, please feel free to reach out via email at:
