@@ -34,7 +34,6 @@
       border: 1px solid var(--border-light);
     }
 
-    /* Top Brand & Status */
     .top-header {
       display: flex;
       justify-content: space-between;
@@ -59,7 +58,6 @@
       margin-top: 2px;
     }
 
-    /* Form Fields Styling */
     .meta-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -110,7 +108,6 @@
       border: 1px solid var(--border-light);
     }
 
-    /* Table Styling for Mobile & Desktop */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -147,11 +144,12 @@
       background: transparent;
       border: 1px solid var(--border-light);
       padding: 8px;
+      width: 100%;
+      border-radius: 6px;
     }
     .table-input:hover { border-color: var(--border); background: #ffffff; }
     .table-input:focus { border-color: var(--accent); background: #ffffff; box-shadow: none; }
 
-    /* Buttons */
     .btn {
       background: var(--accent);
       color: white;
@@ -190,10 +188,10 @@
       border: none;
       padding: 8px 12px;
       border-radius: 6px;
+      cursor: pointer;
     }
     .btn-danger:hover { background: #fca5a5; }
 
-    /* Summary & Totals */
     .bottom-section {
       display: grid;
       grid-template-columns: 1fr 300px;
@@ -229,7 +227,6 @@
       margin-top: 4px;
     }
 
-    /* Action bar */
     .actions-bar {
       display: flex;
       justify-content: space-between;
@@ -243,11 +240,10 @@
 
     .action-buttons-group {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    /* Responsive for Small Mobile Screens */
     @media (max-width: 768px) {
       .invoice-container { padding: 16px 12px; }
       .parties-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -278,7 +274,7 @@
       </div>
       <div style="width: 140px;" class="field-group">
         <label>Currency</label>
-        <select id="currency" onchange="calculateTotals()">
+        <select id="currency" onchange="calculateTotals(); renderItems();">
           <option value="₱">PHP (₱)</option>
           <option value="$">USD ($)</option>
           <option value="€">EUR (€)</option>
@@ -357,12 +353,12 @@
     </div>
 
     <div class="actions-bar no-print">
-      <!-- Ko-fi Support Button -->
       <a href="https://ko-fi.com/handlevault" target="_blank" class="btn btn-kofi">
         ☕ Support on Ko-fi
       </a>
       
       <div class="action-buttons-group">
+        <button class="btn btn-secondary" onclick="loadDraft()">Load Draft</button>
         <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
         <button class="btn" onclick="window.print()">Print / Export PDF</button>
       </div>
@@ -377,18 +373,84 @@
     function renderItems() {
       const tbody = document.getElementById('itemsBody');
       tbody.innerHTML = '';
+      const curr = document.getElementById('currency').value;
+
       items.forEach((item, idx) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><input type="text" class="table-input" value="${item.description}" oninput="updateItem(${idx}, 'description', this.value)" /></td>
-          <td><input type="number" class="table-input" value="${item.qty}" min="1" style="width: 70px;" oninput="updateItem(${idx}, 'qty', parseFloat(this.value)|0)" /></td>
-          <td><input type="number" class="table-input" value="${item.price}" min="0" oninput="updateItem(${idx}, 'price', parseFloat(this.value)|0)" /></td>
-          <td style="font-weight: 600; padding-left: 10px; white-space: nowrap;">${document.getElementById('currency').value}${(item.qty * item.price).toFixed(2)}</td>
-          <td class="no-print" style="text-align: center;"><button class="btn btn-danger" onclick="removeItem(${idx})">✕</button></td>
-        `;
-        tbody.appendChild(row);
+        const tr = document.createElement('tr');
+
+        // Description Cell
+        const tdDesc = document.createElement('td');
+        const inputDesc = document.createElement('input');
+        inputDesc.type = 'text';
+        inputDesc.className = 'table-input';
+        inputDesc.value = item.description;
+        inputDesc.oninput = (e) => { items[idx].description = e.target.value; };
+        tdDesc.appendChild(inputDesc);
+        tr.appendChild(tdDesc);
+
+        // Qty Cell
+        const tdQty = document.createElement('td');
+        const inputQty = document.createElement('input');
+        inputQty.type = 'number';
+        inputQty.className = 'table-input';
+        inputQty.value = item.qty;
+        inputQty.min = '1';
+        inputQty.style.width = '70px';
+        inputQty.oninput = (e) => {
+          items[idx].qty = parseFloat(e.target.value) || 0;
+          updateRowTotal(idx, tr);
+          calculateTotals();
+        };
+        tdQty.appendChild(inputQty);
+        tr.appendChild(tdQty);
+
+        // Price Cell
+        const tdPrice = document.createElement('td');
+        const inputPrice = document.createElement('input');
+        inputPrice.type = 'number';
+        inputPrice.className = 'table-input';
+        inputPrice.value = item.price;
+        inputPrice.min = '0';
+        inputPrice.oninput = (e) => {
+          items[idx].price = parseFloat(e.target.value) || 0;
+          updateRowTotal(idx, tr);
+          calculateTotals();
+        };
+        tdPrice.appendChild(inputPrice);
+        tr.appendChild(tdPrice);
+
+        // Amount Cell
+        const tdAmount = document.createElement('td');
+        tdAmount.id = `amount-${idx}`;
+        tdAmount.style.fontWeight = '600';
+        tdAmount.style.paddingLeft = '10px';
+        tdAmount.style.whiteSpace = 'nowrap';
+        tdAmount.innerText = `${curr}${(item.qty * item.price).toFixed(2)}`;
+        tr.appendChild(tdAmount);
+
+        // Action/Delete Cell
+        const tdAction = document.createElement('td');
+        tdAction.className = 'no-print';
+        tdAction.style.textAlign = 'center';
+        const btnDelete = document.createElement('button');
+        btnDelete.className = 'btn-danger';
+        btnDelete.innerText = '✕';
+        btnDelete.onclick = () => removeItem(idx);
+        tdAction.appendChild(btnDelete);
+        tr.appendChild(tdAction);
+
+        tbody.appendChild(tr);
       });
       calculateTotals();
+    }
+
+    function updateRowTotal(idx, tr) {
+      const curr = document.getElementById('currency').value;
+      const item = items[idx];
+      const amountTd = tr.querySelector(`#amount-${idx}`);
+      if (amountTd) {
+        amountTd.innerText = `${curr}${(item.qty * item.price).toFixed(2)}`;
+      }
     }
 
     function addItem() {
@@ -399,11 +461,6 @@
     function removeItem(idx) {
       items.splice(idx, 1);
       renderItems();
-    }
-
-    function updateItem(idx, field, val) {
-      items[idx][field] = val;
-      calculateTotals();
     }
 
     function calculateTotals() {
@@ -447,15 +504,22 @@
         document.getElementById('notes').value = data.notes || '';
         document.getElementById('taxRate').value = data.taxRate || 12;
         if (data.items && data.items.length) items = data.items;
+        renderItems();
+        alert('Draft loaded successfully!');
       } else {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('issueDate').value = today;
+        alert('No saved draft found.');
       }
     }
 
     window.onload = () => {
-      loadDraft();
-      renderItems();
+      const saved = localStorage.getItem('invoice_pro_v2');
+      if (saved) {
+        loadDraft();
+      } else {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('issueDate').value = today;
+        renderItems();
+      }
     };
   </script>
 </body>
