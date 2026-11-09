@@ -1,217 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crisp Invoice Generator | HandleVault</title>
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --border: #e2e8f0;
-            --accent-bg: #f8fafc;
-            --success: #16a34a;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Invoice Studio</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 8px;
+    }
 
-        /* Style Themes */
-        body.theme-corporate {
-            --primary: #0f172a;
-            --primary-hover: #334155;
-            --accent-bg: #f1f5f9;
-        }
-        body.theme-slate {
-            --primary: #0284c7;
-            --primary-hover: #0369a1;
-            --accent-bg: #f0f9ff;
-        }
-        body.theme-emerald {
-            --primary: #065f46;
-            --primary-hover: #047857;
-            --accent-bg: #ecfdf5;
-            --success: #059669;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); padding: 32px 16px; min-height: 100vh; }
+    
+    .invoice-card {
+      max-width: 850px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+      padding: 40px;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 20px; min-height: 100vh; transition: background 0.3s; }
-        
-        header { max-width: 900px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
-        h1 { color: var(--text-main); font-size: 22px; letter-spacing: -0.5px; }
-        .sub-header { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        
-        .header-actions { display: flex; align-items: center; gap: 12px; }
-        .kofi-link { background: #ff5e5b; color: #fff; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; transition: background 0.2s; }
-        .kofi-link:hover { background: #e04845; }
-        
-        .btn { background: var(--primary); color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-danger { background: #ef4444; padding: 6px 10px; font-size: 12px; }
-        .btn-danger:hover { background: #dc2626; }
+    .brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 20px;
+      margin-bottom: 28px;
+    }
+    
+    .brand-bar h1 {
+      font-size: 26px;
+      letter-spacing: 1px;
+      color: var(--primary);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
 
-        .container { max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
 
-        /* Theme Selector Bar */
-        .style-bar { max-width: 900px; margin: 0 auto 15px; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; }
-        .style-btn { background: var(--border); border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; color: var(--text-main); }
-        .style-btn.active { background: var(--primary); color: #fff; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+    
+    input, select, textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s;
+    }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-        
-        label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
-        input { background: var(--accent-bg); border: 1px solid var(--border); color: var(--text-main); padding: 10px; border-radius: 6px; font-size: 13px; width: 100%; font-family: inherit; }
-        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
 
-        table { width: 100%; border-collapse: collapse; margin: 24px 0; }
-        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { color: var(--text-main); font-size: 12px; font-weight: 700; text-transform: uppercase; background: var(--accent-bg); border-top: 1px solid var(--border); border-bottom: 2px solid var(--border); }
+    .billing-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
 
-        .totals { text-align: right; margin-top: 24px; font-size: 18px; font-weight: 600; color: var(--text-main); }
-        .totals span { color: var(--success); font-weight: 800; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th { text-align: left; padding: 12px 8px; border-bottom: 2px solid var(--border); font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+    td { padding: 10px 8px; border-bottom: 1px solid var(--border); }
+    
+    .table-input { width: 100%; }
 
-        footer { max-width: 900px; margin: 30px auto 0; text-align: center; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 15px; }
-        footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
 
-        @media print {
-            body { background: #fff; padding: 0; }
-            header, footer, .no-print, .style-bar { display: none !important; }
-            .container { border: none; box-shadow: none; padding: 0; max-width: 100%; }
-            input { border: none; background: transparent; padding: 0; font-weight: 600; }
-        }
-    </style>
+    .btn:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-danger { background: #fee2e2; color: #dc2626; border: none; padding: 6px 10px; }
+    .btn-danger:hover { background: #fca5a5; }
+
+    .summary-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      gap: 24px;
+    }
+
+    .totals-box {
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .totals-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-muted); }
+    .totals-row.grand { font-size: 18px; font-weight: 700; color: var(--primary); border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+
+    .actions-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .invoice-card { border: none; box-shadow: none; padding: 0; max-width: 100%; }
+      .no-print { display: none !important; }
+      input, textarea, select { border: none !important; background: transparent !important; padding: 0 !important; }
+      .totals-box { border: none; background: transparent; padding: 0; }
+    }
+  </style>
 </head>
-<body class="theme-corporate">
+<body>
 
-    <header class="no-print">
-        <div>
-            <h1>CRISP INVOICE GENERATOR</h1>
-            <div class="sub-header">Professional Multi-Style Financial Dashboard</div>
-        </div>
-        <div class="header-actions">
-            <a href="https://ko-fi.com/Handlevaultofficial" target="_blank" class="kofi-link">☕ Support on Ko-fi</a>
-            <button class="btn" onclick="window.print()">Print / Save PDF</button>
-        </div>
-    </header>
-
-    <div class="style-bar no-print">
-        <span>Layout Theme:</span>
-        <button class="style-btn active" onclick="setTheme('corporate', this)">Corporate</button>
-        <button class="style-btn" onclick="setTheme('slate', this)">Modern Slate</button>
-        <button class="style-btn" onclick="setTheme('emerald', this)">Emerald Green</button>
+  <div class="invoice-card">
+    <div class="brand-bar">
+      <h1>Invoice Studio</h1>
+      <div class="field-group no-print">
+        <label>Currency</label>
+        <select id="currency" onchange="calculateTotals()">
+          <option value="₱">PHP (₱)</option>
+          <option value="$">USD ($)</option>
+          <option value="€">EUR (€)</option>
+          <option value="¥">JPY (¥)</option>
+        </select>
+      </div>
     </div>
 
-    <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid var(--text-main); padding-bottom: 20px;">
-            <div>
-                <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;">INVOICE</h2>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">HandleVault Studios</div>
-            </div>
-            <div style="text-align: right;">
-                <div class="input-group" style="width: 160px; display: inline-block;">
-                    <label>Invoice Number</label>
-                    <input type="text" value="INV-001" style="font-weight: bold; text-align: right;">
-                </div>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <div>
-                <div class="input-group">
-                    <label>From (Your Company)</label>
-                    <input type="text" value="HandleVault Studios">
-                </div>
-                <div class="input-group">
-                    <label>Billed To (Client Name)</label>
-                    <input type="text" placeholder="Client Name / Business Name">
-                </div>
-            </div>
-            <div>
-                <div class="input-group">
-                    <label>Issue Date</label>
-                    <input type="date" id="invDate">
-                </div>
-                <div class="input-group">
-                    <label>Payment Terms / Due Date</label>
-                    <input type="text" value="Net 30 Days">
-                </div>
-            </div>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Item Description</th>
-                    <th style="width: 90px;">Qty</th>
-                    <th style="width: 130px;">Price ($)</th>
-                    <th style="width: 130px;">Total ($)</th>
-                    <th class="no-print" style="width: 50px;"></th>
-                </tr>
-            </thead>
-            <tbody id="itemsBody">
-                <tr>
-                    <td><input type="text" value="Pixel Art Asset Pack Design"></td>
-                    <td><input type="number" class="qty" value="1" min="1" oninput="calculate()"></td>
-                    <td><input type="number" class="price" value="150" min="0" oninput="calculate()"></td>
-                    <td class="item-total" style="font-weight: 600;">$150.00</td>
-                    <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">X</button></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <button class="btn no-print" onclick="addRow()" style="background: var(--text-main); margin-top: 4px;">+ Add Item</button>
-
-        <div class="totals">
-            Total Amount Due: <span id="grandTotal">$150.00</span>
-        </div>
+    <div class="controls-grid">
+      <div class="field-group">
+        <label>Invoice Number</label>
+        <input type="text" id="invoiceNumber" value="INV-2026-001" />
+      </div>
+      <div class="field-group">
+        <label>Issue Date</label>
+        <input type="date" id="issueDate" />
+      </div>
+      <div class="field-group">
+        <label>Due Date</label>
+        <input type="date" id="dueDate" />
+      </div>
     </div>
 
-    <footer class="no-print">
-        Crisp Suite by <a href="https://ko-fi.com/Handlevaultofficial" target="_blank">HandleVault</a> — Clean, Fast & Single-File Utilities.
-    </footer>
+    <div class="billing-section">
+      <div class="field-group">
+        <label>Billed From (Your Details)</label>
+        <textarea id="fromInfo" rows="4" placeholder="Company Name&#10;Address Line&#10;Email / Phone"></textarea>
+      </div>
+      <div class="field-group">
+        <label>Billed To (Client Details)</label>
+        <textarea id="toInfo" rows="4" placeholder="Client Name&#10;Client Address&#10;Client Email"></textarea>
+      </div>
+    </div>
 
-    <script>
-        document.getElementById('invDate').valueAsDate = new Date();
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th style="width: 90px;">Qty</th>
+          <th style="width: 130px;">Price</th>
+          <th style="width: 130px;">Amount</th>
+          <th class="no-print" style="width: 40px;"></th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
 
-        function calculate() {
-            const rows = document.querySelectorAll('#itemsBody tr');
-            let total = 0;
-            rows.forEach(row => {
-                const qty = parseFloat(row.querySelector('.qty').value) || 0;
-                const price = parseFloat(row.querySelector('.price').value) || 0;
-                const itemTotal = qty * price;
-                row.querySelector('.item-total').textContent = '$' + itemTotal.toFixed(2);
-                total += itemTotal;
-            });
-            document.getElementById('grandTotal').textContent = '$' + total.toFixed(2);
-        }
+    <button class="btn btn-secondary no-print" onclick="addItem()">+ Add Item</button>
 
-        function addRow() {
-            const tbody = document.getElementById('itemsBody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" placeholder="Item description..."></td>
-                <td><input type="number" class="qty" value="1" min="1" oninput="calculate()"></td>
-                <td><input type="number" class="price" value="0" min="0" oninput="calculate()"></td>
-                <td class="item-total" style="font-weight: 600;">$0.00</td>
-                <td class="no-print"><button class="btn btn-danger" onclick="deleteRow(this)">X</button></td>
-            `;
-            tbody.appendChild(tr);
-            calculate();
-        }
+    <div class="summary-container">
+      <div class="field-group" style="flex: 1;">
+        <label>Notes & Payment Terms</label>
+        <textarea id="notes" rows="4" placeholder="e.g. Bank Account: 1234-5678-90&#10;Payment due within 15 days."></textarea>
+      </div>
 
-        function deleteRow(btn) {
-            btn.closest('tr').remove();
-            calculate();
-        }
+      <div class="totals-box">
+        <div class="totals-row">
+          <span>Subtotal</span>
+          <span id="subtotalDisplay">₱0.00</span>
+        </div>
+        <div class="totals-row" style="align-items: center;">
+          <span>Tax Rate (%)</span>
+          <input type="number" id="taxRate" value="12" style="width: 65px; text-align: right;" oninput="calculateTotals()" />
+        </div>
+        <div class="totals-row">
+          <span>Tax Amount</span>
+          <span id="taxDisplay">₱0.00</span>
+        </div>
+        <div class="totals-row grand">
+          <span>Total Due</span>
+          <span id="totalDisplay">₱0.00</span>
+        </div>
+      </div>
+    </div>
 
-        function setTheme(themeName, btn) {
-            document.body.className = 'theme-' + themeName;
-            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-    </script>
+    <div class="actions-bar no-print">
+      <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+      <button class="btn" onclick="window.print()">Print / Export PDF</button>
+    </div>
+  </div>
+
+  <script>
+    let items = [
+      { description: "Professional Services / Consulting", qty: 1, price: 15000 }
+    ];
+
+    function renderItems() {
+      const tbody = document.getElementById('itemsBody');
+      tbody.innerHTML = '';
+      items.forEach((item, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><input type="text" class="table-input" value="${item.description}" oninput="updateItem(${idx}, 'description', this.value)" /></td>
+          <td><input type="number" class="table-input" value="${item.qty}" min="1" oninput="updateItem(${idx}, 'qty', parseFloat(this.value)|0)" /></td>
+          <td><input type="number" class="table-input" value="${item.price}" min="0" oninput="updateItem(${idx}, 'price', parseFloat(this.value)|0)" /></td>
+          <td style="padding-top: 14px; font-weight: 600;">${document.getElementById('currency').value}${(item.qty * item.price).toFixed(2)}</td>
+          <td class="no-print"><button class="btn btn-danger" onclick="removeItem(${idx})">✕</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+      calculateTotals();
+    }
+
+    function addItem() {
+      items.push({ description: "", qty: 1, price: 0 });
+      renderItems();
+    }
+
+    function removeItem(idx) {
+      items.splice(idx, 1);
+      renderItems();
+    }
+
+    function updateItem(idx, field, val) {
+      items[idx][field] = val;
+      calculateTotals();
+    }
+
+    function calculateTotals() {
+      const curr = document.getElementById('currency').value;
+      const subtotal = items.reduce((sum, item) => sum + (item.qty * item.price || 0), 0);
+      const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+      const tax = subtotal * (taxRate / 100);
+      const total = subtotal + tax;
+
+      document.getElementById('subtotalDisplay').innerText = `${curr}${subtotal.toFixed(2)}`;
+      document.getElementById('taxDisplay').innerText = `${curr}${tax.toFixed(2)}`;
+      document.getElementById('totalDisplay').innerText = `${curr}${total.toFixed(2)}`;
+    }
+
+    function saveDraft() {
+      const data = {
+        invoiceNumber: document.getElementById('invoiceNumber').value,
+        issueDate: document.getElementById('issueDate').value,
+        dueDate: document.getElementById('dueDate').value,
+        currency: document.getElementById('currency').value,
+        fromInfo: document.getElementById('fromInfo').value,
+        toInfo: document.getElementById('toInfo').value,
+        notes: document.getElementById('notes').value,
+        taxRate: document.getElementById('taxRate').value,
+        items: items
+      };
+      localStorage.setItem('invoice_pro_draft', JSON.stringify(data));
+      alert('Invoice draft saved successfully!');
+    }
+
+    function loadDraft() {
+      const saved = localStorage.getItem('invoice_pro_draft');
+      if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById('invoiceNumber').value = data.invoiceNumber || 'INV-2026-001';
+        document.getElementById('issueDate').value = data.issueDate || '';
+        document.getElementById('dueDate').value = data.dueDate || '';
+        document.getElementById('currency').value = data.currency || '₱';
+        document.getElementById('fromInfo').value = data.fromInfo || '';
+        document.getElementById('toInfo').value = data.toInfo || '';
+        document.getElementById('notes').value = data.notes || '';
+        document.getElementById('taxRate').value = data.taxRate || 12;
+        if (data.items && data.items.length) items = data.items;
+      } else {
+        // Set default dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('issueDate').value = today;
+      }
+    }
+
+    window.onload = () => {
+      loadDraft();
+      renderItems();
+    };
+  </script>
 </body>
 </html>
