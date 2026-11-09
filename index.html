@@ -340,6 +340,10 @@
           <span>Subtotal</span>
           <span id="subtotalDisplay">₱0.00</span>
         </div>
+         <div class="summary-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.9rem;">
+         <span style="color: #64748b;">Discount (%):</span>
+          <input type="number" id="discountRate" value="0" min="0" max="100" oninput="calculateTotals()" style="width: 80px; padding: 4px 8px; background: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 4px; text-align: right; font-family: inherit;">
+        </div>
         <div class="totals-row">
           <span>Tax Rate (%)</span>
           <input type="number" id="taxRate" value="12" style="width: 70px; text-align: right;" oninput="calculateTotals()" />
