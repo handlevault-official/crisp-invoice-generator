@@ -352,14 +352,15 @@
           <span>Total Due</span>
           <span id="totalDisplay">₱0.00</span>
         </div>
-           <div class="tax-type-selector" style="margin-bottom: 10px;">
-    <label style="font-size: 0.75rem; display: inline-block; margin-right: 10px;">Tax Label Mode:</label>
-    <select id="taxTypeSelect" onchange="updateTaxLabel()" style="padding: 5px; background: #000; color: #ff3399; border: 2px solid #ff007f; font-family: inherit;">
-        <option value="VAT">VAT (Value-Added Tax)</option>
-        <option value="Tax">Sales Tax</option>
-        <option value="CUSTOM">Custom Label</option>
+           <div class="tax-type-selector" style="margin-bottom: 15px; background: #050204; border: 2px solid #ff007f; padding: 12px; box-sizing: border-box;">
+    <label style="font-size: 0.75rem; display: block; margin-bottom: 6px; color: #ffee00; text-transform: uppercase;">Tax Label Mode:</label>
+    <select id="taxTypeSelect" onchange="updateTaxLabel()" style="width: 100%; padding: 10px; background: #000; color: #ff3399; border: 2px solid #ff007f; font-family: inherit; font-weight: bold; outline: none; box-sizing: border-box;">
+        <option value="VAT" style="background: #000; color: #ff3399;">VAT (Value-Added Tax)</option>
+        <option value="Tax" style="background: #000; color: #ff3399;">Sales Tax</option>
+        <option value="CUSTOM" style="background: #000; color: #ff3399;">Custom Label</option>
     </select>
-    <input type="text" id="customTaxLabelInput" placeholder="Enter custom label" style="display: none; margin-top: 5px; padding: 5px;" oninput="updateTaxLabel()">
+    <input type="text" id="customTaxLabelInput" placeholder="Enter custom label" style="display: none; width: 100%; margin-top: 8px; padding: 10px; background: #000; color: #ffee00; border: 2px solid #ff007f; font-family: inherit; box-sizing: border-box;" oninput="updateTaxLabel()">
+</div>
            </div>
       </div>
     </div>
