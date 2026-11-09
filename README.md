@@ -1,16 +1,21 @@
-# 🧾 Professional Invoice Studio
+# 🧾 Crisp Invoice Generator (v1.0 Official)
 
-A lightweight, browser-based invoice and billing generator designed for freelancers, contractors, and small business owners. Create professional invoices instantly with built-in multi-currency selection, tax calculations, and one-click PDF printing. Built using vanilla HTML5, CSS, and JavaScript.
+A lightweight, local-first invoice creation and billing tool built for the **Crisp Suite**. Perfect for freelancers and indie makers who need quick, clean invoices without cloud tracking or complex software.
 
-> **[BETA / EARLY ACCESS TOOL]** — A lightweight, free browser-based invoice and billing generator built for creators, freelancers, and indie makers. No account required. All processing happens securely right inside your browser session.
+## ✨ Core Features (v1.0)
+* **100% Local-First:** Your invoice data stays safe inside your browser storage.
+* **Dynamic Line Items:** Easily add, edit, or remove items and services.
+* **Tax & Currency Customization:** Configure your preferred currency symbol and tax rates instantly.
+* **Auto-Save Drafts:** Never lose your work with automatic browser draft persistence.
+* **Print & Export to PDF:** Clean print styles optimized for professional PDF output.
 
-## 🚀 Features
+## 🚀 Quick Start
+1. Open the live GitHub Pages link or open `index.html` locally.
+2. Fill in client details, line items, and taxes.
+3. Click print/save to generate your professional invoice instantly!
 
-* **Multi-Currency Support:** Easily switch between major global currencies (USD, EUR, GBP, AUD, CAD, SGD, PHP) for international clients.
-* **Editable Line Items:** Add, remove, and update invoice items dynamically with automatic total calculations.
-* **Tax & Discount Options:** Configure tax rates and totals seamlessly.
-* **Browser Print & PDF Export:** Formatted cleanly for direct printing or saving as a professional PDF.
-* **Client-Side Privacy:** All data stays secure within your browser session—no server-side logging or tracking.
+---
+*HandleVault Digital • Crisp Suite Utility v1.0*
 
 ## 🛠️ Local Development & Preview
 
