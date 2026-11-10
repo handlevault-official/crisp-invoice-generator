@@ -1,8 +1,8 @@
-# 🧾 Crisp Invoice Generator (v1.0 Official)
+# 🧾 Crisp Invoice Generator
 
 A lightweight, local-first invoice creation and billing tool built for the **Crisp Suite**. Perfect for freelancers and indie makers who need quick, clean invoices without cloud tracking or complex software.
 
-## ✨ Core Features (v1.0)
+## ✨ Core Features 
 * **100% Local-First:** Your invoice data stays safe inside your browser storage.
 * **Dynamic Line Items:** Easily add, edit, or remove items and services.
 * **Tax & Currency Customization:** Configure your preferred currency symbol and tax rates instantly.
