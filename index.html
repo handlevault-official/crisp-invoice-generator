@@ -300,7 +300,97 @@
     </footer>
   </main>
 
+ <!-- Core Modular Scripts -->
+  <script src="privacy-shield.js"></script>
+  <script src="secure-store.js"></script>
+  <script src="text-db.js"></script>
+  <script src="auth-helper.js"></script>
+  <script src="biometric-auth.js"></script>
+  <script src="app-guidelines.js"></script>
+  <script src="buttons.js"></script>
+  
+  <script src="status-flasher.js"></script>
+  <script src="app-clock.js"></script>
+  <script src="meal-reminder.js"></script>
+  <script src="nurse-widget.js"></script>
+  <script src="calc-logger.js"></script>
+  <script src="app-search.js"></script>
+  
+  <script src="medical-dictionary.js"></script>
+  <script src="voice-processor.js"></script>
+
+  <script src="dashboard-login.js"></script>
+  <script src="myrealaccounts.js"></script>
+  <script src="trial-payment.js"></script>
+  <script src="pwa-loader.js"></script>
+
+  <!-- App Initialization & Voice Engine Script -->
   <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          if (typeof DashboardLogin !== 'undefined' && DashboardLogin.isLoggedIn()) {
+              document.getElementById('mainAppContainer').style.display = 'block';
+              document.getElementById('loginViewContainer').style.display = 'none';
+              
+              const loggedId = localStorage.getItem('nurse_logged_id') || 'Nurse-On-Duty';
+              const badge = document.getElementById('nurseProfileBadge');
+              if (badge) badge.innerHTML = `👩‍⚕️ ${loggedId}`;
+
+              if (typeof TrialPaymentManager !== 'undefined') TrialPaymentManager.renderTrialBanner('trialBannerContainer');
+              if (typeof StatusFlasher !== 'undefined') StatusFlasher.render('statusFlasherContainer', 'active');
+              if (typeof AppClock !== 'undefined') AppClock.render('appClockContainer');
+              if (typeof MealReminder !== 'undefined') MealReminder.render('mealReminderContainer');
+              if (typeof NurseWidgetPanel !== 'undefined') NurseWidgetPanel.render('nurseWidgetContainer');
+              if (typeof AppSearch !== 'undefined') AppSearch.render('appSearchContainer');
+          } else {
+              document.getElementById('mainAppContainer').style.display = 'none';
+              document.getElementById('loginViewContainer').style.display = 'block';
+              if (typeof DashboardLogin !== 'undefined') {
+                  DashboardLogin.renderLogin('loginCardContainer');
+              }
+          }
+
+          if (typeof VoiceProcessor !== 'undefined') {
+              VoiceProcessor.init((result) => {
+                  const logBox = document.getElementById('voiceOutputLog');
+                  const termData = typeof MedicalDictionary !== 'undefined' ? MedicalDictionary.lookup(result.command) : { category: 'general', name: result.command };
+                  
+                  if (logBox) {
+                      logBox.innerHTML = `
+                          <strong>Command Heard:</strong> "${result.command}"<br>
+                          <strong>Category:</strong> ${termData.category.toUpperCase()}<br>
+                          <strong>Action:</strong> ${termData.name || result.description}
+                      `;
+                  }
+                  
+                  if (typeof TextDB !== 'undefined') {
+                      TextDB.addLog(termData.category, result.command, localStorage.getItem('nurse_logged_id') || 'Nurse-On-Duty');
+                  }
+              });
+          }
+      });
+
+      function handleVoiceToggle() {
+          const btn = document.getElementById('micBtn');
+          if (typeof VoiceProcessor !== 'undefined') {
+              if (!VoiceProcessor.isListening) {
+                  VoiceProcessor.start();
+                  btn.textContent = '⏹️ Stop Listening';
+                  btn.style.backgroundColor = '#78350F';
+              } else {
+                  VoiceProcessor.stop();
+                  btn.textContent = '🎙️ Start Voice Command';
+                  btn.style.backgroundColor = 'var(--primary-orange, #F97316)';
+              }
+          }
+      }
+
+      function logoutNurse() {
+          localStorage.removeItem('nurse_session_active');
+          localStorage.removeItem('nurse_logged_id');
+          location.reload();
+      }
+              </script>
+
     const DRAFT_KEY = 'invoice_pro_v2';
     const DEFAULT_ITEMS = [{ description: 'Professional Services / Consulting', qty: 1, price: 12500 }];
     let items = DEFAULT_ITEMS.map((item) => ({ ...item }));
