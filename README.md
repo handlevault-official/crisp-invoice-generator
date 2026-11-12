@@ -56,18 +56,3 @@ If this tool helped you streamline your workflow, consider buying me a coffee to
 
 ### 🔗 Share Crisp Suite
 Found this app useful? Feel free to share the link with your friends, colleagues, or communities (X, Facebook, LinkedIn) to help others boost their productivity too!
-
-<TemplateWidget component_placeholder_id="im_cfde6153016121ea" header_title="Pixel Art Converter MVP & Setup Instructions" templateName="checklist">
-```json
-{
-  "categories": ["Repository & Setup", "Core Utility", "Deployment"],
-  "activeCategory": "Deployment",
-  "items": [
-    { "id": "1", "label": "Create GitHub repository with MIT License", "sublines": ["Successfully deployed"], "category": "Repository & Setup", "checked": true },
-    { "id": "2", "label": "Clone repo and setup local Bash environment", "sublines": ["Workspace ready"], "category": "Repository & Setup", "checked": true },
-    { "id": "3", "label": "Add index.html with clean core utility", "sublines": ["Tested and working"], "category": "Core Utility", "checked": true },
-    { "id": "4", "label": "Clean up repository (remove obsolete files)", "sublines": ["Clean codebase"], "category": "Repository & Setup", "checked": true },
-    { "id": "5", "label": "Enable GitHub Pages and update standardized README", "sublines": ["Complete and saved safely after brownout!"], "category": "Deployment", "checked": true }
-  ]
-}
-</TemplateWidget>
