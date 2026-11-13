@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Create, calculate, save, and print professional invoices locally in your browser." />
   <title>Invoice Studio — Modern &amp; Professional</title>
-  <!-- Pwede mong palitan ang kulay at disenyo ng SVG na ito -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%23b9a8ff%22/><text y=%22.9em%22 font-size=%2260%22 x=%2218%22>✦</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%23b9a8ff%22/><text y=%22.9em%22 font-size=%2260%22 x=%2218%22>✦</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -300,76 +299,11 @@
     </footer>
   </main>
 
-  <!-- Core Modular Scripts -->
+  <!-- Centralized Cross-Promotion Widget Script galing sa handlevault-official -->
   <script src="https://handlevault-official.github.io/handle-vault-assets/widget.js"></script>
-  
-  <!-- App Initialization & Voice Engine Script -->
+
+  <!-- Main Invoice Logic -->
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          if (typeof DashboardLogin !== 'undefined' && DashboardLogin.isLoggedIn()) {
-              document.getElementById('mainAppContainer').style.display = 'block';
-              document.getElementById('loginViewContainer').style.display = 'none';
-              
-              const loggedId = localStorage.getItem('nurse_logged_id') || 'Nurse-On-Duty';
-              const badge = document.getElementById('nurseProfileBadge');
-              if (badge) badge.innerHTML = `👩‍⚕️ ${loggedId}`;
-
-              if (typeof TrialPaymentManager !== 'undefined') TrialPaymentManager.renderTrialBanner('trialBannerContainer');
-              if (typeof StatusFlasher !== 'undefined') StatusFlasher.render('statusFlasherContainer', 'active');
-              if (typeof AppClock !== 'undefined') AppClock.render('appClockContainer');
-              if (typeof MealReminder !== 'undefined') MealReminder.render('mealReminderContainer');
-              if (typeof NurseWidgetPanel !== 'undefined') NurseWidgetPanel.render('nurseWidgetContainer');
-              if (typeof AppSearch !== 'undefined') AppSearch.render('appSearchContainer');
-          } else {
-              document.getElementById('mainAppContainer').style.display = 'none';
-              document.getElementById('loginViewContainer').style.display = 'block';
-              if (typeof DashboardLogin !== 'undefined') {
-                  DashboardLogin.renderLogin('loginCardContainer');
-              }
-          }
-
-          if (typeof VoiceProcessor !== 'undefined') {
-              VoiceProcessor.init((result) => {
-                  const logBox = document.getElementById('voiceOutputLog');
-                  const termData = typeof MedicalDictionary !== 'undefined' ? MedicalDictionary.lookup(result.command) : { category: 'general', name: result.command };
-                  
-                  if (logBox) {
-                      logBox.innerHTML = `
-                          <strong>Command Heard:</strong> "${result.command}"<br>
-                          <strong>Category:</strong> ${termData.category.toUpperCase()}<br>
-                          <strong>Action:</strong> ${termData.name || result.description}
-                      `;
-                  }
-                  
-                  if (typeof TextDB !== 'undefined') {
-                      TextDB.addLog(termData.category, result.command, localStorage.getItem('nurse_logged_id') || 'Nurse-On-Duty');
-                  }
-              });
-          }
-      });
-
-      function handleVoiceToggle() {
-          const btn = document.getElementById('micBtn');
-          if (typeof VoiceProcessor !== 'undefined') {
-              if (!VoiceProcessor.isListening) {
-                  VoiceProcessor.start();
-                  btn.textContent = '⏹️ Stop Listening';
-                  btn.style.backgroundColor = '#78350F';
-              } else {
-                  VoiceProcessor.stop();
-                  btn.textContent = '🎙️ Start Voice Command';
-                  btn.style.backgroundColor = 'var(--primary-orange, #F97316)';
-              }
-          }
-      }
-
-      function logoutNurse() {
-          localStorage.removeItem('nurse_session_active');
-          localStorage.removeItem('nurse_logged_id');
-          location.reload();
-      }
-              </script>
-
     const DRAFT_KEY = 'invoice_pro_v2';
     const DEFAULT_ITEMS = [{ description: 'Professional Services / Consulting', qty: 1, price: 12500 }];
     let items = DEFAULT_ITEMS.map((item) => ({ ...item }));
@@ -543,50 +477,41 @@
         byId('taxRate').value = data.taxRate ?? 12;
         byId('taxTypeSelect').value = data.taxType ?? 'VAT';
         byId('customTaxLabelInput').value = data.customTaxLabel ?? '';
-        items = Array.isArray(data.items)
-          ? data.items.map((item) => ({
-              description: String(item.description ?? ''),
-              qty: Math.max(0, Number(item.qty) || 0),
-              price: Math.max(0, Number(item.price) || 0)
-            }))
-          : DEFAULT_ITEMS.map((item) => ({ ...item }));
+        if (Array.isArray(data.items) && data.items.length > 0) {
+          items = data.items.map((item) => ({ ...item }));
+        }
         updateTaxLabel();
         renderItems();
         if (showMessage) alert('Draft loaded successfully.');
         return true;
       } catch (error) {
-        console.error('Unable to load invoice draft:', error);
-        if (showMessage) alert('The saved draft could not be read. It may be damaged.');
+        console.error('Unable to parse saved invoice draft:', error);
+        if (showMessage) alert('Unable to load draft. The saved file might be corrupted.');
         return false;
       }
     }
 
-    function getLocalDateString(date = new Date()) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
+    // Event Listeners
     byId('addItemButton').addEventListener('click', () => {
       items.push({ description: '', qty: 1, price: 0 });
       renderItems();
     });
-    byId('currency').addEventListener('change', () => {
-      renderItems();
-    });
+    byId('currency').addEventListener('change', renderItems);
     byId('discountRate').addEventListener('input', calculateTotals);
     byId('taxRate').addEventListener('input', calculateTotals);
-    byId('taxTypeSelect').addEventListener('change', updateTaxLabel);
+    byId('taxTypeSelect').addEventListener('change', () => {
+      updateTaxLabel();
+      calculateTotals();
+    });
     byId('customTaxLabelInput').addEventListener('input', updateTaxLabel);
     byId('saveDraftButton').addEventListener('click', saveDraft);
     byId('loadDraftButton').addEventListener('click', () => loadDraft(true));
     byId('printButton').addEventListener('click', () => window.print());
 
-    if (!loadDraft(false)) {
-      byId('issueDate').value = getLocalDateString();
-      renderItems();
-    }
+    // Initial Setup on Page Load
+    updateTaxLabel();
+    renderItems();
+    loadDraft(false);
   </script>
 </body>
 </html>
